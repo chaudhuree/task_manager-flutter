@@ -10,39 +10,56 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  Map<String, String> formData = {"email": "", "password": ""};
   bool isLoading = false;
 
-  inputOnChange(field, value) {
-    setState(() {
-      formData[field] = value;
-    });
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   formOnSubmit() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
     // Form Validation
-    if (formData['email']!.isEmpty) {
+    if (email.isEmpty) {
       ErrorToast('Email Required !');
-    } else if (formData['password']!.isEmpty) {
+      return;
+    }
+
+    if (password.isEmpty) {
       ErrorToast('Password Required !');
-    } else {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    // Form Submit(API Request)
+    Map<String, String> formData = {"email": email, "password": password};
+    bool res = await LoginRequest(formData);
+
+    if (res == true) {
+      SuccessToast('Login Successful !');
       setState(() {
-        isLoading = true;
+        isLoading = false;
       });
-      // Form Submit(API Request)
-      bool res = await LoginRequest(formData);
-      if (res == true) {
-        SuccessToast('Login Successful !');
-        setState(() {
-          isLoading = false;
-        });
-        // Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
-      } else {
-        ErrorToast('Login Failed !');
-        setState(() {
-          isLoading = false;
-        });
-      }
+      emailController.clear();
+      passwordController.clear();
+      // Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+    } else {
+      ErrorToast('Login Failed !');
+      setState(() {
+        isLoading = false;
+      });
+      emailController.clear();
+      passwordController.clear();
     }
   }
 
@@ -74,16 +91,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 20),
 
                         TextFormField(
+                          controller: emailController,
                           decoration: AppInputDecoration("Email Address"),
-                          onChanged: (value) => inputOnChange("email", value),
                         ),
 
                         SizedBox(height: 20),
 
                         TextFormField(
+                          controller: passwordController,
                           decoration: AppInputDecoration("Password"),
-                          onChanged: (value) =>
-                              inputOnChange("password", value),
+                          obscureText: true,
                         ),
 
                         SizedBox(height: 20),
