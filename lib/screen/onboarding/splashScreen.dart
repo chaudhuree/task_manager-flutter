@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/style/style.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -11,8 +12,11 @@ class _SplashscreenState extends State<Splashscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Splash Screen', style: TextStyle(fontSize: 24)),
+      body: Stack(
+        children: [
+          ScreenBackground(context),
+          Center(child: Image(image: AssetImage('assets/images/logo.png'))),
+        ],
       ),
     );
   }
