@@ -16,7 +16,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Scaffold(body: Center(child: Text('Hello, Flutter!'))),
+      home: const Scaffold(
+        body: Center(
+          child: Text(
+            'Hello, Flutter!',
+            style: TextStyle(fontFamily: 'poppins'),
+          ),
+        ),
+      ),
     );
   }
 }
