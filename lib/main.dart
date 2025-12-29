@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/screen/onboarding/emailVerificationScreen.dart';
+import 'package:task_manager/screen/onboarding/loginScreen.dart';
+import 'package:task_manager/screen/onboarding/pinVerificationScreen.dart';
+import 'package:task_manager/screen/onboarding/registrationScreen.dart';
+import 'package:task_manager/screen/onboarding/setPasswordScreen.dart';
+import 'package:task_manager/screen/onboarding/splashScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,19 +17,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Task Manager',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'Hello, Flutter!',
-            style: TextStyle(fontFamily: 'poppins'),
-          ),
-        ),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const Splashscreen(),
+        '/login': (context) => const LoginScreen(),
+        '/registration': (context) => const RegistrationScreen(),
+        '/emailVerification': (context) => const EmailVerificationScreen(),
+        '/pinVerification': (context) => const PinVerificationScreen(),
+        '/setPassword': (context) => const SetPasswordScreen(),
+      },
     );
   }
 }
