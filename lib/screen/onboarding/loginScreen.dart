@@ -10,21 +10,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isLoading = false;
+  Map<String, String> FormValues = {"email": "", "password": ""};
+  bool Loading = false;
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
+  InputOnChange(MapKey, Textvalue) {
+    setState(() {
+      FormValues.update(MapKey, (value) => Textvalue);
+    });
   }
 
   formOnSubmit() async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
+    String email = FormValues["email"]!.trim();
+    String password = FormValues["password"]!.trim();
 
     // Form Validation
     if (email.isEmpty) {
@@ -38,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     setState(() {
-      isLoading = true;
+      Loading = true;
     });
 
     // Form Submit(API Request)
@@ -48,18 +45,20 @@ class _LoginScreenState extends State<LoginScreen> {
     if (res == true) {
       SuccessToast('Login Successful !');
       setState(() {
-        isLoading = false;
+        Loading = false;
       });
-      emailController.clear();
-      passwordController.clear();
+      setState(() {
+        FormValues = {"email": "", "password": ""};
+      });
       // Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
     } else {
       ErrorToast('Login Failed !');
       setState(() {
-        isLoading = false;
+        Loading = false;
       });
-      emailController.clear();
-      passwordController.clear();
+      setState(() {
+        FormValues = {"email": "", "password": ""};
+      });
     }
   }
 
@@ -71,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ScreenBackground(context),
           Container(
             alignment: Alignment.center,
-            child: isLoading
+            child: Loading
                 ? (Center(child: CircularProgressIndicator()))
                 : (SingleChildScrollView(
                     padding: EdgeInsets.all(30),
@@ -91,14 +90,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 20),
 
                         TextFormField(
-                          controller: emailController,
+                          onChanged: (value) {
+                            InputOnChange("email", value);
+                          },
                           decoration: AppInputDecoration("Email Address"),
                         ),
 
                         SizedBox(height: 20),
 
                         TextFormField(
-                          controller: passwordController,
+                          onChanged: (value) {
+                            InputOnChange("password", value);
+                          },
                           decoration: AppInputDecoration("Password"),
                           obscureText: true,
                         ),

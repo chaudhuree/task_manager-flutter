@@ -9,7 +9,7 @@ var BaseURL = "https://task.teamrabbil.com/api/v1";
 var RequestHeader = {"Content-Type": "application/json"};
 
 Future<bool> LoginRequest(FormValues) async {
-  var URL = Uri.parse("${BaseURL}/login");
+  var URL = Uri.parse("$BaseURL/login");
   var PostBody = json.encode(FormValues);
   var response = await http.post(URL, headers: RequestHeader, body: PostBody);
   var ResultCode = response.statusCode;
@@ -26,7 +26,7 @@ Future<bool> LoginRequest(FormValues) async {
 }
 
 Future<bool> RegistrationRequest(FormValues) async {
-  var URL = Uri.parse("${BaseURL}/registration");
+  var URL = Uri.parse("$BaseURL/registration");
   var PostBody = json.encode(FormValues);
   var response = await http.post(URL, headers: RequestHeader, body: PostBody);
   var ResultCode = response.statusCode;
@@ -41,7 +41,7 @@ Future<bool> RegistrationRequest(FormValues) async {
 }
 
 Future<bool> VerifyEmailRequest(Email) async {
-  var URL = Uri.parse("${BaseURL}/RecoverVerifyEmail/${Email}");
+  var URL = Uri.parse("$BaseURL/RecoverVerifyEmail/$Email");
   var response = await http.get(URL, headers: RequestHeader);
   var ResultCode = response.statusCode;
   var ResultBody = json.decode(response.body);
@@ -56,7 +56,7 @@ Future<bool> VerifyEmailRequest(Email) async {
 }
 
 Future<bool> VerifyOTPRequest(Email, OTP) async {
-  var URL = Uri.parse("${BaseURL}/RecoverVerifyOTP/${Email}/${OTP}");
+  var URL = Uri.parse("$BaseURL/RecoverVerifyOTP/$Email/$OTP");
   var response = await http.get(URL, headers: RequestHeader);
   var ResultCode = response.statusCode;
   var ResultBody = json.decode(response.body);
@@ -71,7 +71,7 @@ Future<bool> VerifyOTPRequest(Email, OTP) async {
 }
 
 Future<bool> SetPasswordRequest(FormValues) async {
-  var URL = Uri.parse("${BaseURL}/RecoverResetPass");
+  var URL = Uri.parse("$BaseURL/RecoverResetPass");
   var PostBody = json.encode(FormValues);
 
   var response = await http.post(URL, headers: RequestHeader, body: PostBody);
@@ -89,7 +89,7 @@ Future<bool> SetPasswordRequest(FormValues) async {
 }
 
 Future<List> TaskListRequest(Status) async {
-  var URL = Uri.parse("${BaseURL}/listTaskByStatus/${Status}");
+  var URL = Uri.parse("$BaseURL/listTaskByStatus/$Status");
   String? token = await ReadUserData("token");
   var RequestHeaderWithToken = {
     "Content-Type": "application/json",
@@ -108,7 +108,7 @@ Future<List> TaskListRequest(Status) async {
 }
 
 Future<bool> TaskCreateRequest(FormValues) async {
-  var URL = Uri.parse("${BaseURL}/createTask");
+  var URL = Uri.parse("$BaseURL/createTask");
   String? token = await ReadUserData("token");
   var RequestHeaderWithToken = {
     "Content-Type": "application/json",
@@ -134,7 +134,7 @@ Future<bool> TaskCreateRequest(FormValues) async {
 }
 
 Future<bool> TaskDeleteRequest(id) async {
-  var URL = Uri.parse("${BaseURL}/deleteTask/${id}");
+  var URL = Uri.parse("$BaseURL/deleteTask/$id");
   String? token = await ReadUserData("token");
   var RequestHeaderWithToken = {
     "Content-Type": "application/json",
@@ -153,7 +153,7 @@ Future<bool> TaskDeleteRequest(id) async {
 }
 
 Future<bool> TaskUpdateRequest(id, status) async {
-  var URL = Uri.parse("${BaseURL}/updateTaskStatus/${id}/${status}");
+  var URL = Uri.parse("$BaseURL/updateTaskStatus/$id/$status");
   String? token = await ReadUserData("token");
   var RequestHeaderWithToken = {
     "Content-Type": "application/json",
