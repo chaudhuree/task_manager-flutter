@@ -6,15 +6,23 @@ import 'package:task_manager/screen/onboarding/registrationScreen.dart';
 import 'package:task_manager/screen/onboarding/setPasswordScreen.dart';
 import 'package:task_manager/screen/onboarding/splashScreen.dart';
 import 'package:task_manager/screen/task/newTaskListScreen.dart';
+import 'package:task_manager/utility/utility.dart';
 
-void main() {
-  runApp(const MyApp());
+main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  String? token = await ReadUserData("token");
+  // print("User Token : $token");
+  if (token == null) {
+    runApp(const MyApp(initialRoute: "/login"));
+  } else {
+    runApp(const MyApp(initialRoute: "/taskList"));
+  }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+  const MyApp({super.key, required this.initialRoute});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/taskList',
+      initialRoute: initialRoute,
       routes: {
         '/': (context) => const Splashscreen(),
         '/login': (context) => const LoginScreen(),
