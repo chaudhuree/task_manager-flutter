@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         FormValues = {"email": "", "password": ""};
       });
-      // Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, "/taskList", (route) => false);
     } else {
       ErrorToast('Login Failed !');
       setState(() {
