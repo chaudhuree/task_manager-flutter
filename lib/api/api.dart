@@ -29,6 +29,7 @@ Future<bool> RegistrationRequest(FormValues) async {
   var URL = Uri.parse("$BaseURL/registration");
   var PostBody = json.encode(FormValues);
   var response = await http.post(URL, headers: RequestHeader, body: PostBody);
+  print("Response Body : ${response.body}");
   var ResultCode = response.statusCode;
   var ResultBody = json.decode(response.body);
   if (ResultCode == 200 && ResultBody['status'] == "success") {

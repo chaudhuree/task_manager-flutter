@@ -10,6 +10,7 @@ import 'package:task_manager/utility/utility.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // await RemoveToken();
   String? token = await ReadUserData("token");
   // print("User Token : $token");
   if (token == null) {
