@@ -24,9 +24,9 @@ PinTheme AppOTPStyle() {
   return PinTheme(
     inactiveColor: colorLight,
     inactiveFillColor: colorWhite,
-    selectedColor: colorGreen,
+    selectedColor: colorBlue,
     activeColor: colorWhite,
-    selectedFillColor: colorGreen,
+    selectedFillColor: colorBlue,
     shape: PinCodeFieldShape.box,
     borderRadius: BorderRadius.circular(5),
     fieldHeight: 50,
@@ -75,7 +75,7 @@ TextStyle Head9Text(textColor) {
 InputDecoration AppInputDecoration(label) {
   return InputDecoration(
     focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: colorGreen, width: 1),
+      borderSide: BorderSide(color: colorBlue, width: 1),
     ),
     fillColor: colorWhite,
     filled: true,
@@ -99,13 +99,23 @@ DecoratedBox AppDropDownStyle(child) {
   );
 }
 
-SvgPicture ScreenBackground(context) {
-  return SvgPicture.asset(
-    'assets/images/screen-back.svg',
-    alignment: Alignment.center,
-    width: MediaQuery.of(context).size.width,
-    height: MediaQuery.of(context).size.height,
-    fit: BoxFit.cover,
+Widget screenBackground(context) {
+  return SizedBox.expand(
+    child: SvgPicture.asset(
+      'assets/images/background.svg',
+      alignment: Alignment.topLeft,
+      fit: BoxFit.cover,
+    ),
+  );
+}
+
+Widget mainBackground(context) {
+  return SizedBox.expand(
+    child: SvgPicture.asset(
+      'assets/images/screen-back.svg',
+      alignment: Alignment.topLeft,
+      fit: BoxFit.cover,
+    ),
   );
 }
 
@@ -138,7 +148,7 @@ TextStyle ButtonTextStyle() {
 Ink SuccessButtonChild(String ButtonText) {
   return Ink(
     decoration: BoxDecoration(
-      color: colorGreen,
+      color: colorBlue,
       borderRadius: BorderRadius.circular(6),
     ),
     child: Container(
@@ -175,7 +185,7 @@ void SuccessToast(msg) {
     gravity: ToastGravity.BOTTOM,
     timeInSecForIosWeb: 1,
     toastLength: Toast.LENGTH_SHORT,
-    backgroundColor: colorGreen,
+    backgroundColor: colorBlue,
     textColor: colorWhite,
     fontSize: 16.0,
   );

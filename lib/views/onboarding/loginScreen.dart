@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/api/api.dart';
+import 'package:task_manager/presenters/auth_presenter.dart';
 import 'package:task_manager/style/style.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,57 +10,43 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isLoading = false;
+  final AuthPresenter _presenter = AuthPresenter();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    // Listen to presenter state changes
+    _presenter.addListener(() {
+      if (mounted) setState(() {});
+    });
+  }
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _presenter.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  formOnSubmit() async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
+  Future<void> _formOnSubmit() async {
+    bool success = await _presenter.login(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
 
-    // Form Validation
-    if (email.isEmpty) {
-      ErrorToast('Email Required !');
-      return;
-    }
-
-    if (password.isEmpty) {
-      ErrorToast('Password Required !');
-      return;
-    }
-
-    setState(() {
-      isLoading = true;
-    });
-
-    // Form Submit(API Request)
-    Map<String, String> formData = {"email": email, "password": password};
-    bool res = await LoginRequest(formData);
-
-    if (res == true) {
-      SuccessToast('Login Successful !');
-      setState(() {
-        isLoading = false;
-      });
-      emailController.clear();
-      passwordController.clear();
-      Navigator.pushNamedAndRemoveUntil(context, "/taskList", (route) => false);
-      return;
-    } else {
-      ErrorToast('Login Failed !');
-      setState(() {
-        isLoading = false;
-      });
-      emailController.clear();
-      passwordController.clear();
+    if (success) {
+      _emailController.clear();
+      _passwordController.clear();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          "/taskList",
+          (route) => false,
+        );
+      }
     }
   }
 
@@ -69,10 +55,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          ScreenBackground(context),
+          mainBackground(context),
           Container(
             alignment: Alignment.center,
-            child: isLoading
+            child: _presenter.isLoading
                 ? (Center(child: CircularProgressIndicator()))
                 : (SingleChildScrollView(
                     padding: EdgeInsets.all(30),
@@ -90,39 +76,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: Head6Text(colorLightGray),
                         ),
                         SizedBox(height: 20),
-
                         TextFormField(
-                          controller: emailController,
+                          controller: _emailController,
                           decoration: AppInputDecoration("Email Address"),
                         ),
-
                         SizedBox(height: 20),
-
                         TextFormField(
-                          controller: passwordController,
-                          decoration: AppInputDecoration("Password"),
+                          controller: _passwordController,
                           obscureText: true,
+                          decoration: AppInputDecoration("Password"),
                         ),
-
                         SizedBox(height: 20),
-
                         Container(
                           child: ElevatedButton(
                             style: AppButtonStyle(),
-                            child: SuccessButtonChild('Login'),
                             onPressed: () {
-                              formOnSubmit();
+                              _formOnSubmit();
                             },
+                            child: SuccessButtonChild("Login"),
                           ),
                         ),
-
-                        SizedBox(height: 20),
-
+                        SizedBox(height: 45),
                         Container(
                           alignment: Alignment.center,
                           child: Column(
                             children: [
-                              SizedBox(height: 20),
                               InkWell(
                                 onTap: () {
                                   Navigator.pushNamed(
@@ -131,13 +109,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
                                 },
                                 child: Text(
-                                  'Forget Password?',
+                                  "Forget Password?",
                                   style: Head7Text(colorLightGray),
                                 ),
                               ),
-
                               SizedBox(height: 15),
-
                               InkWell(
                                 onTap: () {
                                   Navigator.pushNamed(context, "/registration");
@@ -146,12 +122,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Don't have a account? ",
+                                      "Don't have an account? ",
                                       style: Head7Text(colorDarkBlue),
                                     ),
                                     Text(
-                                      "Sign Up",
-                                      style: Head7Text(colorGreen),
+                                      "Sign up",
+                                      style: Head7Text(colorBlue),
                                     ),
                                   ],
                                 ),

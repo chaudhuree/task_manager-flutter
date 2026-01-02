@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/api/api.dart';
+import 'package:task_manager/presenters/auth_presenter.dart';
 
 import '../../style/style.dart';
 
@@ -11,30 +11,31 @@ class EmailVerificationScreen extends StatefulWidget {
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
-  Map<String, String> FormValues = {"email": ""};
-  bool Loading = false;
+  final AuthPresenter _presenter = AuthPresenter();
+  final TextEditingController _emailController = TextEditingController();
 
-  InputOnChange(MapKey, Textvalue) {
-    setState(() {
-      FormValues.update(MapKey, (value) => Textvalue);
+  @override
+  void initState() {
+    super.initState();
+    _presenter.addListener(() {
+      if (mounted) setState(() {});
     });
   }
 
-  FormOnSubmit() async {
-    if (FormValues['email']!.length == 0) {
-      ErrorToast('Email Required !');
-    } else {
-      setState(() {
-        Loading = true;
-      });
-      bool res = await VerifyEmailRequest(FormValues['email']);
-      if (res == true) {
-        Navigator.pushNamed(context, "/pinVerification");
-      } else {
-        setState(() {
-          Loading = false;
-        });
-      }
+  @override
+  void dispose() {
+    _presenter.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _formOnSubmit() async {
+    bool success = await _presenter.verifyEmail(
+      email: _emailController.text.trim(),
+    );
+
+    if (success && mounted) {
+      Navigator.pushNamed(context, "/pinVerification");
     }
   }
 
@@ -43,10 +44,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          ScreenBackground(context),
+          mainBackground(context),
           Container(
             alignment: Alignment.center,
-            child: Loading
+            child: _presenter.isLoading
                 ? (Center(child: CircularProgressIndicator()))
                 : (SingleChildScrollView(
                     padding: EdgeInsets.all(30),
@@ -65,9 +66,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         ),
                         SizedBox(height: 20),
                         TextFormField(
-                          onChanged: (Textvalue) {
-                            InputOnChange("email", Textvalue);
-                          },
+                          controller: _emailController,
                           decoration: AppInputDecoration("Email Address"),
                         ),
                         SizedBox(height: 20),
@@ -76,7 +75,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                             style: AppButtonStyle(),
                             child: SuccessButtonChild('Next'),
                             onPressed: () {
-                              FormOnSubmit();
+                              _formOnSubmit();
                             },
                           ),
                         ),

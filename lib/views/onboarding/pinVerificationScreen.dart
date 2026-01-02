@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:task_manager/api/api.dart';
+import 'package:task_manager/presenters/auth_presenter.dart';
 
 import '../../style/style.dart';
-import '../../utility/utility.dart';
 
 class PinVerificationScreen extends StatefulWidget {
   const PinVerificationScreen({Key? key}) : super(key: key);
@@ -12,31 +11,28 @@ class PinVerificationScreen extends StatefulWidget {
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
-  Map<String, String> FormValues = {"otp": ""};
-  bool Loading = false;
+  final AuthPresenter _presenter = AuthPresenter();
+  String _otpValue = '';
 
-  InputOnChange(MapKey, Textvalue) {
-    setState(() {
-      FormValues.update(MapKey, (value) => Textvalue);
+  @override
+  void initState() {
+    super.initState();
+    _presenter.addListener(() {
+      if (mounted) setState(() {});
     });
   }
 
-  FormOnSubmit() async {
-    if (FormValues['otp']!.length != 6) {
-      ErrorToast('PIN Required !');
-    } else {
-      setState(() {
-        Loading = true;
-      });
-      String? emailAddress = await ReadUserData('EmailVerification');
-      bool res = await VerifyOTPRequest(emailAddress, FormValues['otp']);
-      if (res == true) {
-        Navigator.pushNamed(context, "/setPassword");
-      } else {
-        setState(() {
-          Loading = false;
-        });
-      }
+  @override
+  void dispose() {
+    _presenter.dispose();
+    super.dispose();
+  }
+
+  Future<void> _formOnSubmit() async {
+    bool success = await _presenter.verifyOtp(otp: _otpValue);
+
+    if (success && mounted) {
+      Navigator.pushNamed(context, "/setPassword");
     }
   }
 
@@ -45,10 +41,10 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          ScreenBackground(context),
+          mainBackground(context),
           Container(
             alignment: Alignment.center,
-            child: Loading
+            child: _presenter.isLoading
                 ? (Center(child: CircularProgressIndicator()))
                 : (SingleChildScrollView(
                     padding: EdgeInsets.all(30),
@@ -57,12 +53,12 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "PIN Varification",
+                          "PIN Verification",
                           style: Head1Text(colorDarkBlue),
                         ),
                         SizedBox(height: 10),
                         Text(
-                          "A 6 digit pin has been send to your mobile number",
+                          "A 6 digit pin has been sent to your email",
                           style: Head6Text(colorLightGray),
                         ),
                         SizedBox(height: 20),
@@ -75,7 +71,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                           enableActiveFill: true,
                           onCompleted: (v) {},
                           onChanged: (value) {
-                            InputOnChange("otp", value);
+                            _otpValue = value;
                           },
                         ),
                         Container(
@@ -83,7 +79,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                             style: AppButtonStyle(),
                             child: SuccessButtonChild('Verify'),
                             onPressed: () {
-                              FormOnSubmit();
+                              _formOnSubmit();
                             },
                           ),
                         ),

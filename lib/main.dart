@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/screen/onboarding/emailVerificationScreen.dart';
-import 'package:task_manager/screen/onboarding/loginScreen.dart';
-import 'package:task_manager/screen/onboarding/pinVerificationScreen.dart';
-import 'package:task_manager/screen/onboarding/registrationScreen.dart';
-import 'package:task_manager/screen/onboarding/setPasswordScreen.dart';
-import 'package:task_manager/screen/onboarding/splashScreen.dart';
-import 'package:task_manager/screen/task/newTaskListScreen.dart';
 import 'package:task_manager/utility/utility.dart';
+import 'package:task_manager/views/onboarding/emailVerificationScreen.dart';
+import 'package:task_manager/views/onboarding/loginScreen.dart';
+import 'package:task_manager/views/onboarding/pinVerificationScreen.dart';
+import 'package:task_manager/views/onboarding/registrationScreen.dart';
+import 'package:task_manager/views/onboarding/setPasswordScreen.dart';
+import 'package:task_manager/views/onboarding/splashScreen.dart';
+import 'package:task_manager/views/task/newTaskListScreen.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();

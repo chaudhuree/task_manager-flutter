@@ -14,7 +14,7 @@ class _SplashscreenState extends State<Splashscreen> {
     return Scaffold(
       body: Stack(
         children: [
-          ScreenBackground(context),
+          screenBackground(context),
           Center(child: Image(image: AssetImage('assets/images/logo.png'))),
         ],
       ),
