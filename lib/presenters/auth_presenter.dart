@@ -65,12 +65,12 @@ class AuthPresenter extends ChangeNotifier {
       final response = await ApiService.login(email: email, password: password);
 
       if (response.success && response.data != null) {
-        _currentUser = response.data!.user;
+        _currentUser = response.data!;
 
         // Save user data to local storage
         await WriteUserData({
           'token': response.token,
-          'data': response.data!.user.toJson(),
+          'data': response.data!.toJson(),
         });
 
         _showSuccess('Login Successful!');
@@ -82,7 +82,7 @@ class AuthPresenter extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _setError('Login Failed!');
+      _setError('Login Failed! Error: $e');
       _setLoading(false);
       return false;
     }
@@ -149,7 +149,7 @@ class AuthPresenter extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _setError('Registration Failed!');
+      _setError('Registration Failed! Error: $e');
       _setLoading(false);
       return false;
     }
@@ -183,7 +183,7 @@ class AuthPresenter extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _setError('Email verification failed!');
+      _setError('Email verification failed! Error: $e');
       _setLoading(false);
       return false;
     }

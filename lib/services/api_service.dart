@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:task_manager/models/task_model.dart';
 
 import '../models/api_response.dart';
-import '../models/login_response.dart';
 import '../models/user_model.dart';
 
 class ApiService {
@@ -31,7 +31,7 @@ class ApiService {
   /// Login user
   /// POST /login
   /// Body: { email, password }
-  static Future<ApiResponse<LoginResponse>> login({
+  static Future<ApiResponse<UserModel>> login({
     required String email,
     required String password,
   }) async {
@@ -51,7 +51,7 @@ class ApiService {
         return ApiResponse(
           success: true,
           message: resultBody['message'] ?? 'Login successful',
-          data: LoginResponse.fromJson(resultBody),
+          data: UserModel.fromJson(resultBody['data']),
           token: resultBody['token'],
         );
       } else {
@@ -92,8 +92,7 @@ class ApiService {
 
       final resultBody = json.decode(response.body);
 
-      if ((response.statusCode == 200 || response.statusCode == 201) &&
-          resultBody['status'] == 'success') {
+      if ((response.statusCode == 201) && resultBody['status'] == 'success') {
         return ApiResponse(
           success: true,
           message: resultBody['message'] ?? 'Registration successful',
@@ -251,6 +250,49 @@ class ApiService {
       } else {
         return ApiResponse.error(
           resultBody['message'] ?? 'Password reset failed',
+        );
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: ${e.toString()}');
+    }
+  }
+
+  // ==================== Task Management ====================
+
+  /// Create task
+  /// POST /task
+  /// Body: { title, description, status }
+  static Future<ApiResponse<TaskModel>> createTask({
+    required String title,
+    required String description,
+    String status = 'New',
+    required String token,
+  }) async {
+    try {
+      final url = Uri.parse('$baseUrl/createTask');
+      final body = json.encode({
+        'title': title,
+        'description': description,
+        'status': status,
+      });
+
+      final response = await http.post(
+        url,
+        headers: _getAuthHeaders(token),
+        body: body,
+      );
+
+      final resultBody = json.decode(response.body);
+
+      if (response.statusCode == 201 && resultBody['status'] == 'success') {
+        return ApiResponse(
+          success: true,
+          message: resultBody['message'] ?? 'Task created successfully',
+          data: TaskModel.fromJson(resultBody['data']),
+        );
+      } else {
+        return ApiResponse.error(
+          resultBody['message'] ?? 'Task creation failed',
         );
       }
     } catch (e) {

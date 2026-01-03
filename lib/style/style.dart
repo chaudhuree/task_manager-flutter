@@ -7,6 +7,7 @@ const colorRed = Color.fromRGBO(231, 28, 36, 1);
 const colorDark = Color.fromRGBO(136, 28, 32, 1);
 const colorGreen = Color.fromRGBO(33, 191, 115, 1);
 const colorBlue = Color.fromRGBO(52, 152, 219, 1.0);
+const colorLightBlue = Color.fromARGB(255, 179, 231, 255);
 const colorOrange = Color.fromRGBO(230, 126, 34, 1.0);
 const colorWhite = Color.fromRGBO(255, 255, 255, 1.0);
 const colorDarkBlue = Color.fromRGBO(44, 62, 80, 1.0);
@@ -81,9 +82,9 @@ InputDecoration AppInputDecoration(label) {
     filled: true,
     contentPadding: EdgeInsets.fromLTRB(20, 10, 10, 20),
     enabledBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: colorWhite, width: 0.0),
+      borderSide: BorderSide(color: colorLightBlue, width: 1),
     ),
-    border: OutlineInputBorder(),
+    border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
     labelText: label,
   );
 }
@@ -149,6 +150,20 @@ Ink SuccessButtonChild(String ButtonText) {
   return Ink(
     decoration: BoxDecoration(
       color: colorBlue,
+      borderRadius: BorderRadius.circular(6),
+    ),
+    child: Container(
+      height: 45,
+      alignment: Alignment.center,
+      child: Text(ButtonText, style: ButtonTextStyle()),
+    ),
+  );
+}
+
+Ink DangerButtonChild(String ButtonText) {
+  return Ink(
+    decoration: BoxDecoration(
+      color: colorRed,
       borderRadius: BorderRadius.circular(6),
     ),
     child: Container(
