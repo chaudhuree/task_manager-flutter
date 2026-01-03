@@ -7,8 +7,7 @@ import 'package:task_manager/views/onboarding/loginScreen.dart';
 import 'package:task_manager/views/onboarding/pinVerificationScreen.dart';
 import 'package:task_manager/views/onboarding/registrationScreen.dart';
 import 'package:task_manager/views/onboarding/setPasswordScreen.dart';
-import 'package:task_manager/views/onboarding/splashScreen.dart';
-import 'package:task_manager/views/task/newTaskListScreen.dart';
+import 'package:task_manager/views/task/homeScreen.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +17,7 @@ main() async {
   if (token == null) {
     runApp(const MyApp(initialRoute: "/login"));
   } else {
-    runApp(const MyApp(initialRoute: "/taskList"));
+    runApp(const MyApp(initialRoute: "/"));
   }
 }
 
@@ -42,13 +41,13 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: initialRoute,
         routes: {
-          '/': (context) => const Splashscreen(),
+          '/': (context) => const Homescreen(),
+          // '/': (context) => const Splashscreen(),
           '/login': (context) => const LoginScreen(),
           '/registration': (context) => const RegistrationScreen(),
           '/emailVerification': (context) => const EmailVerificationScreen(),
           '/pinVerification': (context) => const PinVerificationScreen(),
           '/setPassword': (context) => const SetPasswordScreen(),
-          '/taskList': (context) => const NewTaskListScreen(),
         },
       ),
     );

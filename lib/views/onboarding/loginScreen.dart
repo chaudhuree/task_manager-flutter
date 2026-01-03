@@ -32,11 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _emailController.clear();
       _passwordController.clear();
       if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          "/taskList",
-          (route) => false,
-        );
+        Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
       }
     }
   }

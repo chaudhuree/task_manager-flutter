@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/utility/utility.dart';
 
-class NewTaskListScreen extends StatefulWidget {
-  const NewTaskListScreen({super.key});
+class NewTaskList extends StatefulWidget {
+  const NewTaskList({super.key});
 
   @override
-  State<NewTaskListScreen> createState() => _NewTaskListScreenState();
+  State<NewTaskList> createState() => _NewTaskListState();
 }
 
-class _NewTaskListScreenState extends State<NewTaskListScreen> {
+class _NewTaskListState extends State<NewTaskList> {
   String email = "";
 
   void initState() {
