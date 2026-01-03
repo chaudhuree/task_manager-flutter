@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_manager/presenters/auth_presenter.dart';
 import 'package:task_manager/style/style.dart';
 
@@ -10,29 +11,19 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final AuthPresenter _presenter = AuthPresenter();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    // Listen to presenter state changes
-    _presenter.addListener(() {
-      if (mounted) setState(() {});
-    });
-  }
-
-  @override
   void dispose() {
-    _presenter.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   Future<void> _formOnSubmit() async {
-    bool success = await _presenter.login(
+    final presenter = Provider.of<AuthPresenter>(context, listen: false);
+    bool success = await presenter.login(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
     );
@@ -58,86 +49,94 @@ class _LoginScreenState extends State<LoginScreen> {
           mainBackground(context),
           Container(
             alignment: Alignment.center,
-            child: _presenter.isLoading
-                ? (Center(child: CircularProgressIndicator()))
-                : (SingleChildScrollView(
-                    padding: EdgeInsets.all(30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Get Started With",
-                          style: Head1Text(colorDarkBlue),
-                        ),
-                        SizedBox(height: 1),
-                        Text(
-                          "Task Manager App",
-                          style: Head6Text(colorLightGray),
-                        ),
-                        SizedBox(height: 20),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: AppInputDecoration("Email Address"),
-                        ),
-                        SizedBox(height: 20),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: AppInputDecoration("Password"),
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          child: ElevatedButton(
-                            style: AppButtonStyle(),
-                            onPressed: () {
-                              _formOnSubmit();
-                            },
-                            child: SuccessButtonChild("Login"),
-                          ),
-                        ),
-                        SizedBox(height: 45),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    "/emailVerification",
-                                  );
+            child: Consumer<AuthPresenter>(
+              builder: (context, presenter, child) {
+                return presenter.isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : SingleChildScrollView(
+                        padding: EdgeInsets.all(30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Get Started With",
+                              style: Head1Text(colorDarkBlue),
+                            ),
+                            SizedBox(height: 1),
+                            Text(
+                              "Task Manager App",
+                              style: Head6Text(colorLightGray),
+                            ),
+                            SizedBox(height: 20),
+                            TextFormField(
+                              controller: _emailController,
+                              decoration: AppInputDecoration("Email Address"),
+                            ),
+                            SizedBox(height: 20),
+                            TextFormField(
+                              controller: _passwordController,
+                              obscureText: true,
+                              decoration: AppInputDecoration("Password"),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              child: ElevatedButton(
+                                style: AppButtonStyle(),
+                                onPressed: () {
+                                  _formOnSubmit();
                                 },
-                                child: Text(
-                                  "Forget Password?",
-                                  style: Head7Text(colorLightGray),
-                                ),
+                                child: SuccessButtonChild("Login"),
                               ),
-                              SizedBox(height: 15),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(context, "/registration");
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Don't have an account? ",
-                                      style: Head7Text(colorDarkBlue),
+                            ),
+                            SizedBox(height: 45),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        "/emailVerification",
+                                      );
+                                    },
+                                    child: Text(
+                                      "Forget Password?",
+                                      style: Head7Text(colorLightGray),
                                     ),
-                                    Text(
-                                      "Sign up",
-                                      style: Head7Text(colorBlue),
+                                  ),
+                                  SizedBox(height: 15),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        "/registration",
+                                      );
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Don't have an account? ",
+                                          style: Head7Text(colorDarkBlue),
+                                        ),
+                                        Text(
+                                          "Sign up",
+                                          style: Head7Text(colorBlue),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )),
+                      );
+              },
+            ),
           ),
         ],
       ),

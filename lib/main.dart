@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_manager/presenters/auth_presenter.dart';
 import 'package:task_manager/utility/utility.dart';
 import 'package:task_manager/views/onboarding/emailVerificationScreen.dart';
 import 'package:task_manager/views/onboarding/loginScreen.dart';
@@ -10,7 +12,7 @@ import 'package:task_manager/views/task/newTaskListScreen.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await RemoveToken();
+  await RemoveToken();
   String? token = await ReadUserData("token");
   // print("User Token : $token");
   if (token == null) {
@@ -26,22 +28,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Task Manager',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthPresenter()),
+        // Add more providers here as you create them
+        // ChangeNotifierProvider(create: (_) => TaskPresenter()),
+      ],
+      child: MaterialApp(
+        title: 'Task Manager',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        initialRoute: initialRoute,
+        routes: {
+          '/': (context) => const Splashscreen(),
+          '/login': (context) => const LoginScreen(),
+          '/registration': (context) => const RegistrationScreen(),
+          '/emailVerification': (context) => const EmailVerificationScreen(),
+          '/pinVerification': (context) => const PinVerificationScreen(),
+          '/setPassword': (context) => const SetPasswordScreen(),
+          '/taskList': (context) => const NewTaskListScreen(),
+        },
       ),
-      initialRoute: initialRoute,
-      routes: {
-        '/': (context) => const Splashscreen(),
-        '/login': (context) => const LoginScreen(),
-        '/registration': (context) => const RegistrationScreen(),
-        '/emailVerification': (context) => const EmailVerificationScreen(),
-        '/pinVerification': (context) => const PinVerificationScreen(),
-        '/setPassword': (context) => const SetPasswordScreen(),
-        '/taskList': (context) => const NewTaskListScreen(),
-      },
     );
   }
 }
