@@ -5,7 +5,7 @@ import 'package:task_manager/presenters/auth_presenter.dart';
 import '../../style/style.dart';
 
 class SetPasswordScreen extends StatefulWidget {
-  const SetPasswordScreen({Key? key}) : super(key: key);
+  const SetPasswordScreen({super.key});
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();
 }

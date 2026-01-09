@@ -6,7 +6,7 @@ import 'package:task_manager/presenters/auth_presenter.dart';
 import '../../style/style.dart';
 
 class PinVerificationScreen extends StatefulWidget {
-  const PinVerificationScreen({Key? key}) : super(key: key);
+  const PinVerificationScreen({super.key});
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
 }
