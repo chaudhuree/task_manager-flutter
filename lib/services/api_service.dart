@@ -299,4 +299,124 @@ class ApiService {
       return ApiResponse.error('Network error: ${e.toString()}');
     }
   }
+
+  // list of all tasks by status
+  // GET /listTaskByStatus/:status
+  // status could be: 'New', 'Progress', 'Completed', 'Cancelled'
+  Future<ApiResponse<List<TaskModel>>> listTaskByStatus(
+    String status,
+    String token,
+  ) async {
+    // Validation
+    if (status.isEmpty) {
+      return ApiResponse.error('Status is required');
+    }
+    if (token.isEmpty) {
+      return ApiResponse.error('You are not authorized to perform this action');
+    }
+    const statusOptions = ['New', 'Progress', 'Completed', 'Cancelled'];
+    if (!statusOptions.contains(status)) {
+      return ApiResponse.error('Invalid status');
+    }
+    // Make API call
+    try {
+      final url = Uri.parse('$baseUrl/listTaskByStatus/$status');
+      final response = await http.get(url, headers: _getAuthHeaders(token));
+
+      final resultBody = json.decode(response.body);
+
+      if (response.statusCode == 200 && resultBody['status'] == 'success') {
+        return ApiResponse(
+          success: true,
+          message: resultBody['message'] ?? 'Task list fetched successfully',
+          data: resultBody['data'] != null
+              ? (resultBody['data'] as List)
+                    .map((taskJson) => TaskModel.fromJson(taskJson))
+                    .toList()
+              : [],
+        );
+      } else {
+        return ApiResponse.error(
+          resultBody['message'] ?? 'Task list fetched failed',
+        );
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: ${e.toString()}');
+    }
+  }
+
+  // Delete task by id
+  // GET /deleteTask/:id
+  Future<ApiResponse<void>> deleteTask(String id, String token) async {
+    // Validation
+    if (id.isEmpty) {
+      return ApiResponse.error('Task ID is required');
+    }
+    if (token.isEmpty) {
+      return ApiResponse.error('You are not authorized to perform this action');
+    }
+
+    // Make API call
+    try {
+      final url = Uri.parse('$baseUrl/deleteTask/$id');
+      final response = await http.delete(url, headers: _getAuthHeaders(token));
+      final resultBody = json.decode(response.body);
+
+      if (response.statusCode == 200 && resultBody['status'] == 'success') {
+        return ApiResponse(
+          success: true,
+          message: resultBody['message'] ?? 'Task deleted successfully',
+        );
+      } else {
+        return ApiResponse.error(
+          resultBody['message'] ?? 'Task deletion failed',
+        );
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: ${e.toString()}');
+    }
+  }
+
+  // Update task status
+  // POST /updateTaskStatus/:id/:status
+  Future<ApiResponse<TaskModel>> updateTaskStatus(
+    String id,
+    String status,
+    String token,
+  ) async {
+    // Validation
+    if (id.isEmpty) {
+      return ApiResponse.error('Task ID is required');
+    }
+    if (status.isEmpty) {
+      return ApiResponse.error('Status is required');
+    }
+    if (token.isEmpty) {
+      return ApiResponse.error('You are not authorized to perform this action');
+    }
+    const statusOptions = ['New', 'Progress', 'Completed', 'Cancelled'];
+    if (!statusOptions.contains(status)) {
+      return ApiResponse.error('Invalid status');
+    }
+    // Make API call
+    try {
+      final url = Uri.parse('$baseUrl/updateTaskStatus/$id/$status');
+      final response = await http.patch(url, headers: _getAuthHeaders(token));
+      final resultBody = json.decode(response.body);
+
+      if (response.statusCode == 200 && resultBody['status'] == 'success') {
+        return ApiResponse(
+          success: true,
+          message: resultBody['message'] ?? 'Task status updated successfully',
+          data: TaskModel.fromJson(resultBody['data']),
+        );
+      } else {
+        return ApiResponse.error(
+          resultBody['message'] ?? 'Task status update failed',
+        );
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: ${e.toString()}');
+    }
+  }
 }
