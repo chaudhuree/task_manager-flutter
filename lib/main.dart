@@ -21,7 +21,7 @@ main() async {
   if (token == null) {
     runApp(const MyApp(initialRoute: "/login"));
   } else {
-    runApp(const MyApp(initialRoute: "/createTask"));
+    runApp(const MyApp(initialRoute: "/"));
   }
 }
 
