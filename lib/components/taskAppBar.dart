@@ -3,14 +3,11 @@ import 'package:task_manager/components/maskedEmailText.dart';
 import 'package:task_manager/style/style.dart';
 import 'package:task_manager/utility/utility.dart';
 
-class TaskAppBar extends StatefulWidget implements PreferredSizeWidget {
+class TaskAppBar extends StatefulWidget {
   const TaskAppBar({super.key});
 
   @override
   State<TaskAppBar> createState() => _TaskAppBarState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(100); // Increased height to accommodate content
 }
 
 class _TaskAppBarState extends State<TaskAppBar> {
