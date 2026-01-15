@@ -48,18 +48,46 @@ class _TaskAppBarState extends State<TaskAppBar> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    radius: 24,
-                    child: ClipOval(
-                      child:
-                          (data['photo'] != null &&
-                              ShowBase64Image(data['photo']!) != null)
-                          ? Image.memory(ShowBase64Image(data['photo']!))
-                          : Image.memory(
-                              ShowBase64Image(DefaultProfilePic),
-                            ), // Fallback to default
-                    ),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        radius: 24,
+                        child: ClipOval(
+                          child:
+                              (data['photo'] != null &&
+                                  ShowBase64Image(data['photo']!) != null)
+                              ? Image.memory(ShowBase64Image(data['photo']!))
+                              : Image.memory(
+                                  ShowBase64Image(DefaultProfilePic),
+                                ),
+                        ),
+                      ),
+
+                      // Edit Icon (Top Right)
+                      Positioned(
+                        top: -2,
+                        right: -2,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, "/profile");
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: colorDarkBlue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.edit,
+                              size: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(width: 10),
                   Column(

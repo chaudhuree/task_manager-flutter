@@ -8,6 +8,7 @@ import 'package:task_manager/views/onboarding/loginScreen.dart';
 import 'package:task_manager/views/onboarding/pinVerificationScreen.dart';
 import 'package:task_manager/views/onboarding/registrationScreen.dart';
 import 'package:task_manager/views/onboarding/setPasswordScreen.dart';
+import 'package:task_manager/views/profile/profileUpdateScreen.dart';
 import 'package:task_manager/views/task/createTaskScreen.dart';
 import 'package:task_manager/views/task/homeScreen.dart';
 
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
           // '/': (context) => const Splashscreen(),
           '/login': (context) => const LoginScreen(),
           '/registration': (context) => const RegistrationScreen(),
+          '/profile': (context) => const ProfileUpdateScreen(),
           '/emailVerification': (context) => const EmailVerificationScreen(),
           '/pinVerification': (context) => const PinVerificationScreen(),
           '/setPassword': (context) => const SetPasswordScreen(),
