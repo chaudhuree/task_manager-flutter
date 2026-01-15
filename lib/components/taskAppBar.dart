@@ -100,25 +100,6 @@ class _TaskAppBarState extends State<TaskAppBar> {
           },
         ),
       ),
-      // actions: [
-      //   IconButton(
-      //     onPressed: () {
-      //       Navigator.pushNamed(context, "/createTask");
-      //     },
-      //     icon: const Icon(Icons.add_circle_outline, color: colorWhite),
-      //   ),
-      //   IconButton(
-      //     onPressed: () async {
-      //       await RemoveToken();
-      //       Navigator.pushNamedAndRemoveUntil(
-      //         context,
-      //         "/login",
-      //         (route) => false,
-      //       );
-      //     },
-      //     icon: const Icon(Icons.output, color: colorWhite),
-      //   ),
-      // ],
     );
   }
 }
